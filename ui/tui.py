@@ -1,6 +1,7 @@
 from rich.console import Console
 from rich.theme 
-
+from rich.rule  import rule
+from rich.text import Text
 AGENT_THEME = Theme(
     {
         # General
@@ -39,7 +40,19 @@ def get_console() -> Console:
 class TUI:
     def __init__(self, console: Console | None = None)-> None:
         self.console = console or get_console()
+        self.__assistant_stream_open = False
+
+
+    def begin_assistant(self)-> None:
+        self.console.print()
+        self.console.print(Rule(Text("Asssitant", style="assistant")))
+        self.__assistant_stream_open = True
+
 
     def stream_assistant_delta(self, Content: str)-> None:
         self.console.print(content, end="", markup=False)
         
+    def end_assistant(self)-> None:
+        if self._assistant_stream_open:
+            self.console.print()
+        self._assistant_stram_open = False
